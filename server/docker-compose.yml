@@ -1,0 +1,28 @@
+services:
+  equity-server:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - ENVIRONMENT=production
+      - FINNHUB_API_KEY=${FINNHUB_API_KEY:-d0s5c1pr01qrmnclmaggd0s5c1pr01qrmnclmah0}
+      - REDIS_URL=redis:6379
+      - REDIS_PASSWORD=
+    depends_on:
+      - redis
+    restart: unless-stopped
+    volumes:
+      - ./static:/root/static
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:

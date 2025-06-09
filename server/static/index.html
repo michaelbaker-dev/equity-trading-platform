@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equity Trading Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Make resize handles visible */
+        .resize-handle {
+            background-color: #ddd;
+            flex: 0 0 8px;
+        }
+        
+        /* Add horizontal scrollbar to ensure all panels are accessible */
+        body {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Left Panel: Watchlist -->
+        <div class="watchlist-panel">
+            <div class="watchlist-header">
+                <h2>Watchlist</h2>
+                <div class="watchlist-actions">
+                    <button class="icon-button" id="add-stock-btn" title="Add Stock"><i class="fas fa-plus"></i></button>
+                    <button class="icon-button" id="search-watchlist-btn" title="Search Watchlist"><i class="fas fa-search"></i></button>
+                    <button class="icon-button" id="sort-watchlist-btn" title="Sort Watchlist"><i class="fas fa-sort-alpha-down"></i></button>
+                    <button class="icon-button" id="clear-watchlist-btn" title="Clear All"><i class="fas fa-trash-alt"></i></button>
+                    <button class="icon-button" id="manage-watchlist-btn" title="Manage Watchlist"><i class="fas fa-cog"></i></button>
+                </div>
+            </div>
+            
+            <!-- Add Stock Modal -->
+            <div id="add-stock-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Add Stock to Watchlist</h3>
+                        <span class="close-modal">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="search-container">
+                            <input type="text" id="stock-search-input" placeholder="Search by symbol or name...">
+                            <button id="search-stock-btn"><i class="fas fa-search"></i></button>
+                        </div>
+                        <div id="search-results" class="search-results">
+                            <!-- Search results will be added here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="watchlist-filters">
+                <button class="filter-button"><i class="fas fa-file"></i></button>
+                <button class="filter-button"><i class="fas fa-chart-line"></i></button>
+                <button class="filter-button"><i class="fas fa-th"></i></button>
+                <button class="filter-button"><i class="fas fa-cog"></i></button>
+            </div>
+            
+            <div class="watchlist-table-header">
+                <div class="column price-column">Price</div>
+                <div class="column change-column">% Chg</div>
+            </div>
+            
+            <div class="watchlist-items" id="watchlist">
+                <!-- Watchlist items will be dynamically generated here -->
+            </div>
+            
+            <div class="watchlist-footer">
+                <button class="footer-button"><i class="fas fa-heart"></i></button>
+                <button class="footer-button"><i class="fas fa-comment"></i></button>
+                <button class="footer-button"><i class="fas fa-chart-bar"></i></button>
+                <button class="footer-button"><i class="fas fa-newspaper"></i></button>
+                <button class="footer-button"><i class="fas fa-compass"></i></button>
+                <button class="footer-button"><i class="fas fa-user"></i></button>
+            </div>
+        </div>
+        
+        <!-- Resize handle between watchlist and stock detail panels -->
+        <div class="resize-handle" id="handle-left"></div>
+        
+        <!-- Middle Panel: Stock Details -->
+        <div class="stock-detail-panel">
+            <div class="stock-detail-header">
+                <div class="back-button"><i class="fas fa-chevron-left"></i></div>
+                <div class="stock-search"><i class="fas fa-search"></i></div>
+                <div class="stock-favorite"><i class="fas fa-heart"></i></div>
+            </div>
+            
+            <div class="stock-info-container">
+                <div class="stock-title">
+                    <h2>MSFT</h2>
+                    <h3>Microsoft</h3>
+                </div>
+                <div class="stock-subtitle">
+                    <span>Prev. Close 11/14 16:00:00 ET</span>
+                    <div class="stock-exchange-icons">
+                        <span class="exchange-icon">US</span>
+                        <span class="exchange-icon">FX</span>
+                        <span class="exchange-icon">OX</span>
+                    </div>
+                </div>
+                
+                <div class="stock-price-container">
+                    <div class="current-price">370.270<i class="fas fa-caret-up"></i></div>
+                    <div class="price-change">
+                        <span class="change-amount">+3.590</span>
+                        <span class="change-percent">+0.98%</span>
+                    </div>
+                </div>
+                
+                <div class="stock-details-grid">
+                    <div class="detail-row">
+                        <div class="detail-label">High</div>
+                        <div class="detail-value">371.950</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Low</div>
+                        <div class="detail-value">367.345</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Volume</div>
+                        <div class="detail-value">27.68M</div>
+                    </div>
+                </div>
+                
+                <div class="post-market">
+                    <div class="post-market-label">Post-Mkt</div>
+                    <div class="post-market-price">371.120</div>
+                    <div class="post-market-change positive">+0.850</div>
+                    <div class="post-market-percent positive">+0.23%</div>
+                </div>
+                
+                <div class="news-item">
+                    <div class="news-icon"><i class="fas fa-play"></i></div>
+                    <div class="news-content">Replay: What you need to know about Q3 earnings 2023</div>
+                    <div class="news-count">(3)</div>
+                </div>
+            </div>
+            
+            <div class="chart-navigation">
+                <div class="nav-item active">Chart</div>
+                <div class="nav-item">Options</div>
+                <div class="nav-item">Comments</div>
+                <div class="nav-item">News</div>
+                <div class="nav-item">Company</div>
+            </div>
+            
+            <div class="stock-chart-container">
+                <!-- Professional chart will be rendered here -->
+                <div id="professional-chart-container">
+                    <!-- Professional chart content will be dynamically generated -->
+                </div>
+            </div>
+            
+            <!-- News Container (initially hidden) -->
+            <div class="news-container" style="display: none;">
+                <div class="news-header">
+                    <h3>Latest News for <span class="news-symbol">MSFT</span></h3>
+                </div>
+                <div class="news-list">
+                    <!-- News items will be added here dynamically -->
+                    <div class="news-loading">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-text">Loading news...</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-footer">
+                <div class="chart-label">Dow</div>
+                <div class="chart-value">34827.70</div>
+                <div class="chart-change positive">+489.83</div>
+                <div class="chart-percent positive">+1.43%</div>
+            </div>
+        </div>
+        
+        <!-- Resize handle between stock detail and order book panels -->
+        <div class="resize-handle" id="handle-right"></div>
+        
+        <!-- Right Panel: Order Book -->
+        <div class="order-book-panel">
+            <div class="order-book-header">
+                <div class="back-button"><i class="fas fa-chevron-left"></i></div>
+                <div class="stock-info">
+                    <div class="stock-symbol">MSFT</div>
+                    <div class="stock-price">370.270<i class="fas fa-caret-up"></i></div>
+                    <div class="stock-change positive">+3.590 +0.98%</div>
+                </div>
+                <div class="stock-search"><i class="fas fa-search"></i></div>
+                <div class="stock-favorite"><i class="fas fa-heart"></i></div>
+            </div>
+            
+            <div class="order-book-navigation">
+                <div class="nav-item active">Chart</div>
+                <div class="nav-item">Options</div>
+                <div class="nav-item">Comments</div>
+                <div class="nav-item">News</div>
+                <div class="nav-item">Company</div>
+            </div>
+            
+            <div class="order-actions">
+                <div class="action-button">Trade</div>
+                <div class="action-button">Positions</div>
+                <div class="action-button">Orders</div>
+                <div class="action-button">History</div>
+            </div>
+            
+            <div class="bid-ask-container">
+                <div class="bid-container">
+                    <div class="bid-label">Bid</div>
+                    <div class="bid-percentage">12.50%</div>
+                    <div class="bid-price">371.000</div>
+                    <div class="bid-quantity">100</div>
+                </div>
+                <div class="ask-container">
+                    <div class="ask-label">Ask</div>
+                    <div class="ask-percentage">87.50%</div>
+                    <div class="ask-price">371.120</div>
+                    <div class="ask-quantity">700</div>
+                </div>
+            </div>
+            
+            <div class="level-info">
+                <div class="level-label">Level 2 data ends in 16 days</div>
+                <div class="access-button">Access Unlimited</div>
+            </div>
+            
+            <div class="order-book-title">Order Book</div>
+            
+            <div class="order-book-table" id="order-book">
+                <!-- Order book rows will be added here -->
+                <div class="order-row">
+                    <div class="bid-side">
+                        <div class="quantity">1</div>
+                        <div class="price">371.000</div>
+                        <div class="exchange">ARCA</div>
+                    </div>
+                    <div class="ask-side">
+                        <div class="exchange">ARCA</div>
+                        <div class="price">371.120</div>
+                        <div class="quantity">710</div>
+                    </div>
+                </div>
+                
+                <div class="order-row">
+                    <div class="bid-side">
+                        <div class="quantity">100</div>
+                        <div class="price">371.000</div>
+                        <div class="exchange">ARCA</div>
+                    </div>
+                    <div class="ask-side">
+                        <div class="exchange">ARCA</div>
+                        <div class="price">371.140</div>
+                        <div class="quantity">10</div>
+                    </div>
+                </div>
+                
+                <div class="order-row">
+                    <div class="bid-side">
+                        <div class="quantity">1</div>
+                        <div class="price">371.000</div>
+                        <div class="exchange">ARCA</div>
+                    </div>
+                    <div class="ask-side">
+                        <div class="exchange">ARCA</div>
+                        <div class="price">371.140</div>
+                        <div class="quantity">800</div>
+                    </div>
+                </div>
+                
+                <div class="order-row">
+                    <div class="bid-side">
+                        <div class="quantity">79</div>
+                        <div class="price">371.000</div>
+                        <div class="exchange">ARCA</div>
+                    </div>
+                    <div class="ask-side">
+                        <div class="exchange">ARCA</div>
+                        <div class="price">371.140</div>
+                        <div class="quantity">1</div>
+                    </div>
+                </div>
+                
+                <div class="order-row">
+                    <div class="bid-side">
+                        <div class="quantity">1</div>
+                        <div class="price">370.940</div>
+                        <div class="exchange">ARCA</div>
+                    </div>
+                    <div class="ask-side">
+                        <div class="exchange">ARCA</div>
+                        <div class="price">371.250</div>
+                        <div class="quantity">18</div>
+                    </div>
+                </div>
+                
+                <div class="order-row">
+                    <div class="bid-side">
+                        <div class="quantity">10</div>
+                        <div class="price">370.890</div>
+                        <div class="exchange">ARCA</div>
+                    </div>
+                    <div class="ask-side">
+                        <div class="exchange">ARCA</div>
+                        <div class="price">371.250</div>
+                        <div class="quantity">4</div>
+                    </div>
+                </div>
+                
+                <div class="order-row">
+                    <div class="bid-side">
+                        <div class="quantity">1</div>
+                        <div class="price">370.800</div>
+                        <div class="exchange">ARCA</div>
+                    </div>
+                    <div class="ask-side">
+                        <div class="exchange">ARCA</div>
+                        <div class="price">371.250</div>
+                        <div class="quantity">3</div>
+                    </div>
+                </div>
+                
+                <div class="order-row">
+                    <div class="bid-side">
+                        <div class="quantity">500</div>
+                        <div class="price">370.800</div>
+                        <div class="exchange">ARCA</div>
+                    </div>
+                    <div class="ask-side">
+                        <div class="exchange">ARCA</div>
+                        <div class="price">371.290</div>
+                        <div class="quantity">1</div>
+                    </div>
+                </div>
+                
+                <div class="order-row">
+                    <div class="bid-side">
+                        <div class="quantity">3</div>
+                        <div class="price">370.800</div>
+                        <div class="exchange">ARCA</div>
+                    </div>
+                    <div class="ask-side">
+                        <div class="exchange">ARCA</div>
+                        <div class="price">371.290</div>
+                        <div class="quantity">1</div>
+                    </div>
+                </div>
+                
+                <div class="order-row">
+                    <div class="bid-side">
+                        <div class="quantity">2</div>
+                        <div class="price">370.800</div>
+                        <div class="exchange">ARCA</div>
+                    </div>
+                    <div class="ask-side">
+                        <div class="exchange">ARCA</div>
+                        <div class="price">371.290</div>
+                        <div class="quantity">7</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="market-footer">
+                <div class="market-label">NASDAQ</div>
+                <div class="market-value">14094.38</div>
+                <div class="market-change positive">+326.64</div>
+                <div class="market-percent positive">+2.37%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New JavaScript files for Go server integration -->
+    <script src="js/api-client.js"></script>
+    <script src="js/ui-components.js"></script>
+    <script src="js/update-frequency-manager.js"></script>
+    <script src="js/watchlist-manager.js"></script>
+    <script src="js/stock-search.js"></script>
+    <script src="js/professional-chart.js"></script>
+    <script src="js/equity-app.js"></script>
+</body>
+</html>
