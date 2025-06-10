@@ -540,6 +540,43 @@ body {
     min-width: 250px;
 }
 
+/* TradingView Chart Integration */
+.stock-chart-container .tradingview-widget-container {
+    height: 450px;
+    width: 100%;
+    position: relative;
+    background: #131722;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.stock-chart-container .tradingview-widget-container__widget {
+    height: calc(100% - 32px);
+    width: 100%;
+}
+
+.stock-chart-container .tradingview-widget-copyright {
+    font-size: 11px;
+    line-height: 32px;
+    text-align: center;
+    color: #9db2bd;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(19, 23, 34, 0.9);
+    z-index: 10;
+}
+
+.stock-chart-container .tradingview-widget-copyright a {
+    color: #3b82f6;
+    text-decoration: none;
+}
+
+.stock-chart-container .tradingview-widget-copyright a:hover {
+    text-decoration: underline;
+}
+
 .stock-chart {
     width: 100%;
     min-height: 250px;

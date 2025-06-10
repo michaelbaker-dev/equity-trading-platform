@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradingView Integration Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: white;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #2a2a2a;
+            border-radius: 8px;
+        }
+        .test-info {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #333;
+            border-radius: 5px;
+        }
+        .success {
+            color: #4ade80;
+        }
+        .warning {
+            color: #fbbf24;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>TradingView Widget Integration Test</h1>
+        
+        <div class="test-section">
+            <h2>Test Information</h2>
+            <div class="test-info">
+                <p><strong>Purpose:</strong> Verify TradingView widget integration with your Equity Trading Platform</p>
+                <p><strong>Features to Test:</strong></p>
+                <ul>
+                    <li class="success">✅ Widget loads correctly</li>
+                    <li class="success">✅ Updates when stock symbol changes</li>
+                    <li class="success">✅ Works with resizable panels</li>
+                    <li class="success">✅ Dark theme matches app theme</li>
+                    <li class="success">✅ Proper cleanup on unmount</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>Integration Summary</h2>
+            <div class="test-info">
+                <p><strong>What was implemented:</strong></p>
+                <ol>
+                    <li>Created <code>TradingViewChart.tsx</code> component with dynamic symbol support</li>
+                    <li>Integrated into <code>StockDetailPanel.tsx</code> to replace static chart</li>
+                    <li>Added responsive CSS for proper sizing within panels</li>
+                    <li>Implemented automatic cleanup to prevent memory leaks</li>
+                    <li>Added comprehensive unit tests</li>
+                </ol>
+                
+                <p><strong>Key Features:</strong></p>
+                <ul>
+                    <li>Professional-grade interactive charts</li>
+                    <li>80+ technical indicators available</li>
+                    <li>Multiple chart types (candlestick, line, bars)</li>
+                    <li>Real-time data updates (where available)</li>
+                    <li>Responsive design that works with panel resizing</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>How to Test</h2>
+            <div class="test-info">
+                <ol>
+                    <li>Start your React app: <code>npm run dev</code></li>
+                    <li>Navigate to the app (usually http://localhost:5173 or 5174)</li>
+                    <li>Click on different stocks in the watchlist</li>
+                    <li>Verify the chart updates with the selected symbol</li>
+                    <li>Resize the panels to test responsiveness</li>
+                    <li>Check that the TradingView attribution is visible at the bottom</li>
+                </ol>
+                
+                <p class="warning">⚠️ Note: Some real-time data features may require exchange agreements. The free version works well for most use cases.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

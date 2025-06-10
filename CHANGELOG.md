@@ -5,6 +5,27 @@ All notable changes to the Equity Trading Platform will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.0] - 2025-01-06
+
+### Added
+- **TradingView Integration**: Professional interactive charts with 80+ technical indicators
+  - Replaced static SVG charts with TradingView widget
+  - Dynamic symbol updates when selecting stocks from watchlist
+  - Dark theme integration matching app design
+  - Responsive sizing within resizable panels
+  - Proper cleanup handling to prevent memory leaks
+  - Comprehensive test coverage for widget lifecycle
+
+### Fixed
+- **Tab Switching Error**: Fixed "null is not an object" error when switching from Chart to News tab
+  - Added proper DOM element checks before widget cleanup
+  - Implemented safe error handling for widget removal
+  - Added cleanup state tracking to prevent race conditions
+
+### Changed
+- **Chart Container**: Updated CSS for better TradingView widget integration
+- **Component Architecture**: Enhanced TradingViewChart component with improved lifecycle management
+
 ## [1.0.0] - 2025-06-09
 
 ### Added

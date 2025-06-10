@@ -6,6 +6,7 @@ import { useSelectedSymbol } from '../../stores/stockStore';
 import { useStockQuote, useCompanyProfile } from '../../hooks/useStockData';
 import { useActiveTab, useUIStore } from '../../stores/uiStore';
 import { StockNewsPanel } from './StockNewsPanel';
+import { TradingViewChart } from '../charts/TradingViewChart';
 
 export const StockDetailPanel: React.FC = () => {
   const selectedSymbol = useSelectedSymbol();
@@ -201,44 +202,11 @@ export const StockDetailPanel: React.FC = () => {
       {/* Tab Content */}
       {activeTab === 'chart' && (
         <div className="stock-chart-container">
-          <div className="stock-chart">
-            <div className="chart-time-selector">
-              <div className="time-option" data-period="1D">1D</div>
-              <div className="time-option active" data-period="1W">1W</div>
-              <div className="time-option" data-period="1M">1M</div>
-              <div className="time-option" data-period="3M">3M</div>
-              <div className="time-option" data-period="1Y">1Y</div>
-              <div className="time-option" data-period="5Y">5Y</div>
-            </div>
-            <div className="chart-y-axis">
-              <div className="y-axis-label">1.57%</div>
-              <div className="y-axis-label">0.82%</div>
-              <div className="y-axis-label">0.46%</div>
-              <div className="y-axis-label">0.08%</div>
-            </div>
-            <div className="chart-x-axis">
-              <div className="x-axis-label">09:31</div>
-              <div className="x-axis-label">16:00</div>
-            </div>
-            <svg className="stock-chart-line" viewBox="0 0 100 100" preserveAspectRatio="none">
-              <path className="chart-path" d="M0,50 L8.33,60 L16.67,33.33 L25,66.67 L33.33,50 L41.67,16.67 L50,33.33 L58.33,40 L66.67,26.67 L75,50 L83.33,60 L91.67,40 L100,50" stroke="#28a745" strokeWidth="0.5" fill="none" vectorEffect="non-scaling-stroke"></path>
-              <path className="chart-area" d="M0,100 L0,50 L8.33,60 L16.67,33.33 L25,66.67 L33.33,50 L41.67,16.67 L50,33.33 L58.33,40 L66.67,26.67 L75,50 L83.33,60 L91.67,40 L100,50 L100,100 Z" fill="rgba(40, 167, 69, 0.1)"></path>
-            </svg>
-            <div className="chart-navigation-dots">
-              <span className="nav-dot"></span>
-              <span className="nav-dot active"></span>
-            </div>
-            <div className="volume-section">
-              <span className="volume-label">VOL</span>
-              <span className="volume-value">41,628,282</span>
-              <div className="volume-bars">
-                <div className="volume-bar"></div>
-                <div className="volume-bar"></div>
-                <div className="volume-bar"></div>
-                <div className="volume-bar"></div>
-              </div>
-            </div>
-          </div>
+          <TradingViewChart 
+            symbol={selectedSymbol || 'MSFT'} 
+            theme="dark"
+            height={400}
+          />
         </div>
       )}
 
