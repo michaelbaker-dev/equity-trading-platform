@@ -130,7 +130,8 @@ class ApiClient {
 
   // WebSocket URL for real-time data
   getWebSocketUrl(): string {
-    // Connect directly to backend for WebSocket (bypass proxy)
+    // In development, connect directly to the backend WebSocket endpoint
+    // WebSocket connections cannot be proxied through Vite like HTTP requests
     if (import.meta.env.DEV) {
       return 'ws://localhost:8080/api/v1/ws/stocks';
     }
@@ -144,15 +145,18 @@ class ApiClient {
 // Create singleton instance
 export const apiClient = new ApiClient();
 
+// Export generic api object for general use
+export const api = apiClient.client;
+
 // Export individual API functions for convenience
 export const stockAPI = {
   testConnection: () => apiClient.testConnection(),
   getQuote: (symbol: string) => apiClient.getQuote(symbol),
-  getCandles: (symbol: string, resolution: string, from: number, to: number) => 
+  getCandles: (symbol: string, resolution: string, from: number, to: number) =>
     apiClient.getCandles(symbol, resolution, from, to),
   getProfile: (symbol: string) => apiClient.getProfile(symbol),
   searchStocks: (query: string) => apiClient.searchStocks(query),
-  getNews: (symbol: string, from?: string, to?: string) => 
+  getNews: (symbol: string, from?: string, to?: string) =>
     apiClient.getNews(symbol, from, to),
   getOrderBook: (symbol: string) => apiClient.getOrderBook(symbol),
   getWebSocketUrl: () => apiClient.getWebSocketUrl()

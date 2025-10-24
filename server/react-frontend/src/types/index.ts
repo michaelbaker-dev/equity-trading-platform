@@ -86,7 +86,7 @@ export interface WebSocketMessage {
 
 // UI State types
 export type TimePeriod = '1D' | '5D' | '1M' | '6M' | 'YTD' | '1Y' | '5Y' | 'Max';
-export type TabType = 'chart' | 'options' | 'comments' | 'news' | 'company';
+export type TabType = 'chart' | 'options' | 'comments' | 'news' | 'company' | 'ai';
 
 export interface PanelWidths {
   left: number;
@@ -221,12 +221,14 @@ export interface WatchlistItemWithId {
 export interface UIStore {
   panelWidths: PanelWidths;
   activeTab: TabType;
+  selectedAIModel: string | null;
   modals: {
     addStock: boolean;
     [key: string]: boolean;
   };
   setPanelWidths: (widths: PanelWidths) => void;
   setActiveTab: (tab: TabType) => void;
+  setSelectedAIModel: (model: string) => void;
   openModal: (modal: string) => void;
   closeModal: (modal: string) => void;
 }

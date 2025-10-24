@@ -5,6 +5,21 @@ All notable changes to the Equity Trading Platform will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **AI Tab with Ollama Integration**: New AI tab in middle pane navigation after Company tab
+  - Added 'ai' to TabType definitions
+  - Backend API endpoint to fetch available Ollama models (`/api/v1/ollama/models`)
+  - AI Panel component with model dropdown selector
+  - Integration with Ollama HTTP API (port 11434)
+  - State management for selected AI model with localStorage persistence
+  - Styled AI panel with model selector and informational display
+  - React Query hook for fetching and caching available models
+  - Updated test suite to include AI tab switching
+  - Automatic model selection (defaults to first available model)
+  - Human-readable file sizes (GB, MB) for model display
+
 ## [0.1.0] - 2025-01-06
 
 ### Added
@@ -21,6 +36,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added proper DOM element checks before widget cleanup
   - Implemented safe error handling for widget removal
   - Added cleanup state tracking to prevent race conditions
+- **WebSocket Connection in Development**: Fixed WebSocket URL configuration for development environment
+  - Changed WebSocket URL to connect directly to backend (ws://localhost:8080) instead of Vite proxy
+  - WebSocket connections cannot be proxied through Vite like HTTP requests
+  - Resolved issue where price updates were not being received in development mode
 
 ### Changed
 - **Chart Container**: Updated CSS for better TradingView widget integration

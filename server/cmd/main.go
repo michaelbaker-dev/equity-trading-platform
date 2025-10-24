@@ -71,6 +71,7 @@ func main() {
 	// Initialize handlers
 	stockHandler := handlers.NewStockHandler(finnhubClient, cacheClient)
 	wsHandler := handlers.NewWebSocketHandler(wsHub)
+	ollamaHandler := handlers.NewOllamaHandler()
 
 	// API routes
 	api := router.Group("/api/v1")
@@ -97,6 +98,12 @@ func main() {
 
 		// WebSocket endpoint
 		api.GET("/ws/stocks", wsHandler.HandleWebSocket)
+
+		// Ollama endpoints
+		ollama := api.Group("/ollama")
+		{
+			ollama.GET("/models", ollamaHandler.GetModels)
+		}
 	}
 
 	// Health check endpoint

@@ -30,10 +30,13 @@ export const useUIStore = create<UIStore>()(
     (set, _get) => ({
       // Panel layout state
       panelWidths: DEFAULT_PANEL_WIDTHS,
-      
+
       // Active tab state
       activeTab: 'chart' as TabType,
-      
+
+      // AI model selection state
+      selectedAIModel: null,
+
       // Modal state
       modals: {
         addStock: false
@@ -48,6 +51,11 @@ export const useUIStore = create<UIStore>()(
       setActiveTab: (tab: TabType) => {
         console.log(`🗂️  Switching to tab: ${tab}`);
         set({ activeTab: tab });
+      },
+
+      setSelectedAIModel: (model: string) => {
+        console.log(`🤖 Setting AI model: ${model}`);
+        set({ selectedAIModel: model });
       },
 
       openModal: (modal: string) => {
@@ -73,10 +81,11 @@ export const useUIStore = create<UIStore>()(
     {
       name: 'equity-ui-state', // localStorage key
       version: 2, // Increment version to reset old data
-      // Persist panel widths and activeTab
+      // Persist panel widths, activeTab, and selectedAIModel
       partialize: (state) => ({
         panelWidths: state.panelWidths,
-        activeTab: state.activeTab
+        activeTab: state.activeTab,
+        selectedAIModel: state.selectedAIModel
       }),
       // Storage options
       storage: createJSONStorage(() => localStorage),

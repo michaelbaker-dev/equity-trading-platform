@@ -6,6 +6,7 @@ import { stockAPI } from '../services/api';
 import { useStockStore } from '../stores/stockStore';
 import type { WebSocketMessage } from '../types';
 
+
 interface UseWebSocketOptions {
   reconnectInterval?: number;
   maxReconnectAttempts?: number;
@@ -80,13 +81,20 @@ export const useWebSocket = (
   }, [sendMessage]);
 
   const connect = useCallback(() => {
-    if (!enabled || isConnecting || wsRef.current?.readyState === WebSocket.OPEN) {
+    // Clean up any existing connection first
+    if (wsRef.current) {
+      console.log('🧹 Cleaning up existing WebSocket before new connection');
+      wsRef.current.close();
+      wsRef.current = null;
+    }
+
+    if (!enabled || isConnecting) {
       return;
     }
 
-    // Throttle connection attempts (minimum 2 seconds between attempts)
+    // Throttle connection attempts (minimum 3 seconds between attempts)
     const now = Date.now();
-    if (now - lastConnectionAttemptRef.current < 2000) {
+    if (now - lastConnectionAttemptRef.current < 3000) {
       console.log('⏳ Throttling WebSocket connection attempt');
       return;
     }
@@ -107,8 +115,7 @@ export const useWebSocket = (
         setIsConnecting(false);
         reconnectAttemptsRef.current = 0;
         
-        // Subscribe to all current symbols
-        symbols.forEach(symbol => subscribe(symbol));
+        // We'll handle subscriptions in a separate effect to avoid closure issues
       };
 
       wsRef.current.onmessage = (event) => {
@@ -133,14 +140,24 @@ export const useWebSocket = (
         setIsConnected(false);
         setIsConnecting(false);
         
-        // Attempt to reconnect if not a clean close
-        if (event.code !== 1000 && reconnectAttemptsRef.current < maxReconnectAttempts) {
+        // Clear any existing reconnection timeout
+        if (reconnectTimeoutRef.current) {
+          clearTimeout(reconnectTimeoutRef.current);
+        }
+        
+        // Only attempt to reconnect if it's an unexpected disconnect and we haven't exceeded attempts
+        if (event.code !== 1000 && event.code !== 1001 && reconnectAttemptsRef.current < maxReconnectAttempts) {
           reconnectAttemptsRef.current++;
           console.log(`🔄 Main app attempting to reconnect (${reconnectAttemptsRef.current}/${maxReconnectAttempts})...`);
           
+          // Use exponential backoff for reconnection attempts
+          const backoffDelay = Math.min(reconnectInterval * Math.pow(2, reconnectAttemptsRef.current - 1), 30000);
+          
           reconnectTimeoutRef.current = setTimeout(() => {
-            connect();
-          }, reconnectInterval);
+            if (wsRef.current?.readyState !== WebSocket.OPEN) {
+              connect();
+            }
+          }, backoffDelay);
         } else if (reconnectAttemptsRef.current >= maxReconnectAttempts) {
           setLastError('Maximum reconnection attempts reached');
           console.error('❌ Main app maximum reconnection attempts reached');
@@ -158,29 +175,46 @@ export const useWebSocket = (
       setLastError('Failed to create WebSocket connection');
       setIsConnecting(false);
     }
-  }, [enabled, isConnecting, subscribe, maxReconnectAttempts, reconnectInterval, updateRealTimePrice]);
+  }, [enabled, isConnecting, maxReconnectAttempts, reconnectInterval, updateRealTimePrice]);
 
   // Connect on mount and when symbols change
   useEffect(() => {
+    let mounted = true;
+    
     if (enabled && symbols.length > 0) {
-      // Add a small delay to avoid rapid reconnections
+      // Add a delay to handle StrictMode double-mounting more gracefully
       const timer = setTimeout(() => {
-        connect();
-      }, 100);
+        if (mounted && !wsRef.current) {
+          connect();
+        }
+      }, 500); // Increased delay to prevent rapid reconnections
       
       return () => {
+        mounted = false;
         clearTimeout(timer);
+        // Always cleanup to prevent multiple connections
         cleanup();
       };
     }
     
-    return cleanup;
+    return () => {
+      mounted = false;
+      cleanup();
+    };
   }, [enabled, symbols.length, connect]);
 
-  // Subscribe/unsubscribe when symbols array changes
+  // Subscribe/unsubscribe when symbols array changes or connection is established
   useEffect(() => {
     if (!isConnected) return;
 
+    // When we first connect, subscribe to all symbols
+    if (subscribedSymbolsRef.current.size === 0 && symbols.length > 0) {
+      console.log('🔔 Initial subscription to all symbols:', symbols);
+      symbols.forEach(symbol => subscribe(symbol));
+      return;
+    }
+
+    // Handle changes to symbol list
     const currentSubscribed = Array.from(subscribedSymbolsRef.current);
     const toUnsubscribe = currentSubscribed.filter(symbol => !symbols.includes(symbol));
     const toSubscribe = symbols.filter(symbol => !subscribedSymbolsRef.current.has(symbol));
@@ -191,8 +225,11 @@ export const useWebSocket = (
 
   // Cleanup on unmount
   useEffect(() => {
-    return cleanup;
-  }, [cleanup]);
+    return () => {
+      console.log('🔌 WebSocket hook unmounting, cleaning up...');
+      cleanup();
+    };
+  }, []);
 
   return {
     isConnected,

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { StockDetailPanel } from '../components/stock-detail/StockDetailPanel';
@@ -76,10 +76,10 @@ describe('Tab Switching', () => {
       </QueryClientProvider>
     );
 
-    const tabs = ['news', 'options', 'comments', 'company', 'chart'];
-    
+    const tabs = ['news', 'options', 'comments', 'company', 'ai', 'chart'];
+
     tabs.forEach((tabName) => {
-      const tab = screen.getByText(tabName.charAt(0).toUpperCase() + tabName.slice(1));
+      const tab = screen.getByText(tabName === 'ai' ? 'AI' : tabName.charAt(0).toUpperCase() + tabName.slice(1));
       fireEvent.click(tab);
       
       expect(setActiveTab).toHaveBeenCalledWith(tabName);

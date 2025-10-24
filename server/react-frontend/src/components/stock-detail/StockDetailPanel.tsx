@@ -7,6 +7,7 @@ import { useStockQuote, useCompanyProfile } from '../../hooks/useStockData';
 import { useActiveTab, useUIStore } from '../../stores/uiStore';
 import { StockNewsPanel } from './StockNewsPanel';
 import { TradingViewChart } from '../charts/TradingViewChart';
+import { AIPanel } from '../ai/AIPanel';
 
 export const StockDetailPanel: React.FC = () => {
   const selectedSymbol = useSelectedSymbol();
@@ -191,11 +192,17 @@ export const StockDetailPanel: React.FC = () => {
         >
           News
         </div>
-        <div 
+        <div
           className={`nav-item ${activeTab === 'company' ? 'active' : ''}`}
           onClick={() => handleTabClick('company')}
         >
           Company
+        </div>
+        <div
+          className={`nav-item ${activeTab === 'ai' ? 'active' : ''}`}
+          onClick={() => handleTabClick('ai')}
+        >
+          AI
         </div>
       </div>
       
@@ -237,7 +244,11 @@ export const StockDetailPanel: React.FC = () => {
           <div className="placeholder-description">Detailed company information and financials coming soon</div>
         </div>
       )}
-      
+
+      {activeTab === 'ai' && (
+        <AIPanel />
+      )}
+
       <div className="chart-footer">
         <div className="chart-label">Dow</div>
         <div className="chart-value">34827.70</div>

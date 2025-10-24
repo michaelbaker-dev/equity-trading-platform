@@ -7,6 +7,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AppLayout } from './components/layout/AppLayout';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { WebSocketTest } from './components/debug/WebSocketTest';
+// import { WebSocketDebug } from './components/debug/WebSocketDebug';
 // import { AuthGuard } from './components/auth/AuthGuard';
 // import { useWatchlistSync } from './hooks/useWatchlistSync';
 
@@ -48,6 +49,8 @@ function SimpleApp() {
       <AppLayout />
       {/* Debug WebSocket connection - controlled by startup script */}
       {import.meta.env.DEV && import.meta.env.VITE_SHOW_DEBUG_WINDOW === 'true' && <WebSocketTest />}
+      {/* WebSocket Debug Panel - uncomment to debug WebSocket issues */}
+      {/* {import.meta.env.DEV && <WebSocketDebug />} */}
     </div>
   )
 }

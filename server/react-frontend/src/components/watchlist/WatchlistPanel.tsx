@@ -9,7 +9,7 @@ import { WatchlistFooter } from './WatchlistFooter';
 import { AddStockModal } from '../search/AddStockModal';
 import { useWatchlistSymbols } from '../../stores/watchlistStore';
 import { useModalState } from '../../stores/uiStore';
-import { useWebSocket } from '../../hooks/useWebSocket';
+import { useWebSocketSimple } from '../../hooks/useWebSocketSimple';
 
 export const WatchlistPanel: React.FC = () => {
   // Use dynamic symbols from the watchlist store (user-defined functionality)
@@ -17,7 +17,7 @@ export const WatchlistPanel: React.FC = () => {
   const isAddStockModalOpen = useModalState('addStock');
   
   // Connect to WebSocket for real-time updates
-  const { isConnected } = useWebSocket(symbols);
+  const { isConnected, isConnecting, lastError } = useWebSocketSimple(symbols);
 
   return (
     <div className="watchlist-panel">
@@ -34,15 +34,27 @@ export const WatchlistPanel: React.FC = () => {
       
       <WatchlistFooter />
       
-      {/* Connection status indicator */}
+      {/* Connection status indicator - now working properly */}
       <div className="connection-status" style={{ 
         padding: '8px 15px', 
         fontSize: '12px',
-        color: isConnected ? '#28a745' : '#dc3545',
+        color: isConnected ? '#28a745' : isConnecting ? '#ffc107' : '#dc3545',
         backgroundColor: 'rgba(255,255,255,0.1)',
-        borderTop: '1px solid #f0f0f0'
+        borderTop: '1px solid #f0f0f0',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px'
       }}>
-        {isConnected ? '🟢 Connected' : '🔴 Disconnected'}
+        <span>
+          {isConnected ? '🟢 Connected' : 
+           isConnecting ? '🟡 Connecting...' : 
+           '🔴 Disconnected'}
+        </span>
+        {lastError && !isConnected && (
+          <span style={{ color: '#dc3545', fontSize: '11px' }}>
+            ({lastError})
+          </span>
+        )}
       </div>
       
       {/* Enhanced Add Stock Modal with search functionality */}
